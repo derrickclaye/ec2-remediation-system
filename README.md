@@ -1,2 +1,39 @@
-# ec2-remediation-system
-Undetected server failures can have catastrophic repercussions when gone undetected. In order to ensure that doesn’t happen, I leveraged ServiceNow in order to configured a remediation system that detects when a server has failed and deals with it accordingly.
+### System Overview
+
+Undetected server failures can have catastrophic repercussions when gone undetected. In order to ensure that doesn’t happen, I leveraged ServiceNow in order to configured a remediation system that detects when a server has failed and deals with it accordingly. When a server’s status changes from ‘ON’ to ‘OFF’ this triggers the remediation workflow.  The workflow is comprised of 3 steps. First I leveraged AI Search to return articles that outline how to solve a failed EC2 instance. That article is then sent to the appropriate personnel via Slack. Lastly an incident record is created to document the failure. That completes the workflow, and now after referencing the article(s) the dev-ops engineers now know what scripts to run in order to bring the failed server back online. 
+
+
+### Implementation Steps
+
+I. In order to isolate this custom functionality the first step was to create a scoped application in ServiceNow. Some benefits of creating a scoped application include isolation and conflict prevention, improved manageability, and enhanced security.
+
+II. The system is designed to facilitate a channel of communication between ServiceNow and AWS. When the remediation script is triggered from ServiceNow, it sends a request to an endpoint on the backend that is configured to fix the EC2 instance. The request has to be sent with the appropriate credentials which is why on the ServiceNow end I had to set up the necessary connection and credentials infrastructure.
+
+III. Tracking the EC2 instances and remediation attempts on ServiceNow required the creation of two tables:
+
+	- The EC2 instances table tracks the health of each instance. When the remediation script is triggered and the server is fixed,  the status of the particular EC2 is updated back to a healthy state.
+
+	- The Remediation Logs tables tracks and logs remediation attempts. This table is also automatically populated when the remediation script is triggered. Some key fields on this table are Response Payload, HTTP Status and Success.
+
+IV. The remediation workflow mentioned above in the System Overview required certain components:
+
+	- A knowledge article that outlines the steps needed to remediate the failed server. This article was placed inside an AI Search Application that was used in one of the workflow’s actions. 
+
+	- The retrieved article data was then passed into a Slack action that sent the data to appropriate personnel via a web hook. 
+
+	- The last step was to take relevant data from the EC2 record and create an Incident to document the failure. 
+
+
+### Optimization
+
+In terms of basic infrastructure, I ensured certain table fields were made mandatory, created an Application Menu to contain the EC2 Instance and Remediation Log tables as well as ensured the Incident report created in the flow was as detailed as possible. 
+
+### DevOps Usage
+
+As a DevOps engineer you must have a dedicated slack channel in order to receive instructions on how to deal with failed EC2 instances. As you will see, in the event of a failed EC2 instance you will be sent an article that outlines the remediation steps which are:
+	
+	1. Navigate to EC2 instance table
+	2. Press ‘Trigger EC2 Remediation’ UI action
+	3. Check the Remediation Log to ensure you received a 201 HTTP Response Status Code
+
+
