@@ -31,6 +31,17 @@ IV. The remediation workflow mentioned above in the System Overview required cer
 
 	- The last step was to take relevant data from the EC2 record and create an Incident to document the failure. 
 
+ V. At this point the Dev-Ops engineer knows that they must navigate to the EC2 record and press the UI Action EC2 Remediation Trigger.
+
+ <img width="1465" height="301" alt="Screenshot 2025-09-12 at 9 49 20 AM" src="https://github.com/user-attachments/assets/53b14758-f377-4425-ad56-b5c08c0b1d77" />
+
+ 
+This UI Action includes a script that leverages the GlideAjax API to call a Script Include from the client. The Script Include that was created is responsibe for making the API call that fixes the EC2 then creates a record in the Remediation Log table to detail the remediation attempt.
+
+ 
+<img width="1334" height="420" alt="Screenshot 2025-09-12 at 9 47 50 AM" src="https://github.com/user-attachments/assets/cfb524c3-51c2-4932-9ade-c2e8b816bd01" />
+
+ 
 
 ### Optimization
 
