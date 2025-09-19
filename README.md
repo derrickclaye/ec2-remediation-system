@@ -3,7 +3,8 @@
 Undetected server failures can have catastrophic repercussions when gone undetected. In order to ensure that doesn’t happen, I leveraged ServiceNow in order to configured a remediation system that detects when a server has failed and deals with it accordingly. When a server’s status changes from ‘ON’ to ‘OFF’ this triggers the remediation workflow.  The workflow is comprised of 3 steps. First I leveraged AI Search to return articles that outline how to solve a failed EC2 instance. That article is then sent to the appropriate personnel via Slack. Lastly an incident record is created to document the failure. That completes the workflow, and now after referencing the article(s) the dev-ops engineers now know what scripts to run in order to bring the failed server back online. 
 
 
-<img width="884" height="1051" alt="Diagram" src="https://github.com/user-attachments/assets/d0a64165-a86e-41e9-85ff-15a1159055c4" />
+<img width="1181" height="1159" alt="Diagram" src="https://github.com/user-attachments/assets/6aa490b9-178a-4159-a245-b01e29eb54cb" />
+
 
 
 
